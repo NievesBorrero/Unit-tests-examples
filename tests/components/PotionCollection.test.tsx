@@ -31,7 +31,7 @@ describe("CourseCollection component", () => {
                 [potion])))
         ))
 
-        const { result, waitForNextUpdate } = renderHook(() =>
+        const { waitForNextUpdate } = renderHook(() =>
             useSearchAllPotions()
         )
 
@@ -40,11 +40,6 @@ describe("CourseCollection component", () => {
         render(<PotionCollection/>)
 
         const potionName = await screen.findByText(potion.name)
-
-        expect(result.current).toStrictEqual({
-            loading: false,
-            potionList: [potion]
-        });
 
         expect(potionName).toBeInTheDocument();
 

@@ -7,10 +7,11 @@ import { PotionPrize } from './styled/PotionPrize'
 import { CurrencyText } from './styled/CurrencyText'
 
 interface PotionCardProps {
-    potion: Potion
+    potion: Potion,
+    onClickButton: Function
 }
 
-const PotionCard = ({ potion }: PotionCardProps): JSX.Element => {
+const PotionCard = ({ potion, onClickButton }: PotionCardProps): JSX.Element => {
     return  (
         <Col className="gutter-row" span={6}>
             <Card>
@@ -26,7 +27,9 @@ const PotionCard = ({ potion }: PotionCardProps): JSX.Element => {
                         </PotionPrize>
                     </Col>
                     <Col className="gutter-row" span={10}>
-                        <CardButton>Add +</CardButton>
+                        <CardButton onClick={() => onClickButton()}>
+                            Add +
+                        </CardButton>
                     </Col>
                 </Row>
             </Card>
