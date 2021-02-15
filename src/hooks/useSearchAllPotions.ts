@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { searchAllPotions } from "../services/PotionRepository"
+import { searchAllPotions } from "../services/ApiClient"
 
 export function useSearchAllPotions() {
     const [result, setResult] = useState({ potionList: null, error: '' })

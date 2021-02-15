@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, InternalServerError } from '../errors'
 
-class PotionRepository {
+class ApiClient {
     private readonly BASE_PATH = 'http://localhost:3030'
     private readonly RESOURCE = 'potions'
     private readonly HEADERS = {'Content-Type': 'application/json'}
@@ -14,6 +14,26 @@ class PotionRepository {
       const response = await this.request(request).then(response => response)
 
       return response
+    }
+
+    async get(id: string) {
+      const request = new Request(`${this.BASE_PATH}/${this.RESOURCE}/${id}`, {
+        method: 'GET',
+        headers: this.HEADERS
+      })
+      const response = await this.request(request).then(response => response)
+
+      return response
+    }
+
+    create (payload:object) {
+      const request = new Request(`${this.BASE_PATH}/${this.RESOURCE}`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: this.HEADERS
+      })
+
+      return this.request(request)
     }
 
     async request (request:RequestInfo) {
@@ -52,6 +72,16 @@ class PotionRepository {
   }
 
   export const searchAllPotions = async () => {
-    const potionRepository = new PotionRepository()
+    const potionRepository = new ApiClient()
     return await potionRepository.searchAll()
+  }
+
+  export const getPotion = async (id: string) => {
+    const potionRepository = new ApiClient()
+    return await potionRepository.get(id)
+  }
+
+  export const createPotion = async (potion: Potion) => {
+    const potionRepository = new ApiClient()
+    return await potionRepository.create(potion)
   }

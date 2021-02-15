@@ -1,5 +1,5 @@
 interface Potion {
-    id: string
+    id?: string
     name: string
     prize: number
     effect: string

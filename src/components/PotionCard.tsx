@@ -5,13 +5,13 @@ import { PotionImage } from './styled/PotionImage'
 import { CardButton } from './styled/CardButton'
 import { PotionPrize } from './styled/PotionPrize'
 import { CurrencyText } from './styled/CurrencyText'
+import { redirectTo } from '../helpers'
 
 interface PotionCardProps {
-    potion: Potion,
-    onClickButton: Function
+    potion: Potion
 }
 
-const PotionCard = ({ potion, onClickButton }: PotionCardProps): JSX.Element => {
+const PotionCard = ({ potion}: PotionCardProps): JSX.Element => {
     return  (
         <Col className="gutter-row" span={6}>
             <Card>
@@ -27,8 +27,10 @@ const PotionCard = ({ potion, onClickButton }: PotionCardProps): JSX.Element => 
                         </PotionPrize>
                     </Col>
                     <Col className="gutter-row" span={10}>
-                        <CardButton onClick={() => onClickButton()}>
-                            Add +
+                        <CardButton
+                            role="button"
+                            onClick={() => redirectTo(`potion/${potion.id}`)}>
+                                Details
                         </CardButton>
                     </Col>
                 </Row>
