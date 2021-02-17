@@ -45,11 +45,11 @@ const PotionForm = () => {
     useEffect((): void => {
         switch(response){
             case RESPONSE.SUCCESS:
-                showSuccessMessage(RESPONSE_TEXT.SUCCESS); break
+                showSuccessMessage('Potion created'); break
             case RESPONSE.ERROR:
-                showErrorMessage(RESPONSE_TEXT.ERROR); break
+                showErrorMessage('Creation error'); break
             case RESPONSE.INVALID:
-                showErrorMessage(RESPONSE_TEXT.INVALID); break
+                showErrorMessage('Fill in all the fields'); break
         }
     }, [response])
 

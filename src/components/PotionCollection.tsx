@@ -5,19 +5,7 @@ import PotionCard from './PotionCard'
 import { useSearchAllPotions } from '../hooks/useSearchAllPotions'
 
 const PotionCollection = () => {
-    const [showNotification, setShowNotification] = useState(false)
-    const { potionList, error} = useSearchAllPotions()
-
-    useEffect(() => {
-        if(showNotification){
-            message.info({
-                style: { marginTop: '100px'},
-                content: <span>Potion added</span>,
-                onClose: setShowNotification(false),
-                className: 'info-notification'
-            })
-        }
-    }, [showNotification])
+    const { potionList } = useSearchAllPotions()
 
     return (
         <Row gutter={[20, 20]}>

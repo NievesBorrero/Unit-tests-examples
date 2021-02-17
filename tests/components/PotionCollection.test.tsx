@@ -1,14 +1,11 @@
 import React from "react"
 import "@testing-library/jest-dom"
 import {render, screen } from "@testing-library/react"
-import { renderHook } from "@testing-library/react-hooks"
 
 import PotionCollection from "../../src/components/PotionCollection"
 import { useSearchAllPotions } from "../../src/hooks/useSearchAllPotions"
 import { searchAllPotions } from "../../src/services/ApiClient"
 import {potion} from "../constants"
-
-jest.mock('../../src/services/ApiClient')
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -24,18 +21,14 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 })
 
+jest.mock('../../src/services/ApiClient')
+
 describe("PotionCollection component", () => {
     it("should list potions", async() => {
         (searchAllPotions as jest.Mock).mockImplementation(() => (
             new Promise((resolve) => jest.fn().mockResolvedValue(resolve(
-                [potion])))
+                [ potion ])))
         ))
-
-        const { waitForNextUpdate } = renderHook(() =>
-            useSearchAllPotions()
-        )
-
-        await waitForNextUpdate()
 
         render(<PotionCollection/>)
 

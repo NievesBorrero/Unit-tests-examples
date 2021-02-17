@@ -26,12 +26,12 @@ Object.defineProperty(window, 'matchMedia', {
 jest.mock('../../src/services/ApiClient')
 
 describe("PotionForm component when the user fill in all fields", () => {
-    it("should show a success notification", async() => {
+    it("should show a success message", async() => {
         (createPotion as jest.Mock).mockImplementation(() => (
             new Promise((resolve) => jest.fn().mockResolvedValue(resolve(potion)))
         ))
-
         render(<PotionForm/>)
+
 
         const name = screen.getByLabelText(/name/i)
         userEvent.type(name, "My awesome potion")
@@ -43,43 +43,43 @@ describe("PotionForm component when the user fill in all fields", () => {
         userEvent.type(effect, "Crazy effect")
 
         const button = screen.getByRole("button", { name: /create/i })
-
         userEvent.click(button)
 
-        const message = await screen.findByText(RESPONSE_TEXT.SUCCESS)
+        const message = await screen.findByText('Potion created')
+
 
         expect(message).toBeInTheDocument();
 
 
         (createPotion as jest.Mock).mockReset()
     })
-    it("should show an invalid notification when the user doesn´t fill in all fields", async() => {
+    it("should show an message when the user doesn´t fill in all fields", async() => {
         (createPotion as jest.Mock).mockImplementation(() => (
             new Promise((resolve) => jest.fn().mockResolvedValue(resolve(potion)))
         ))
-
         render(<PotionForm/>)
+
 
         const name = screen.getByLabelText(/name/i)
         userEvent.type(name, "My awesome potion")
 
         const button = await screen.getByRole("button", { name: /create/i })
-
         userEvent.click(button)
 
         const message = await screen.findByText(RESPONSE_TEXT.INVALID)
+
 
         expect(message).toBeInTheDocument();
 
         (createPotion as jest.Mock).mockReset()
     })
-    it("should show an error notification when the response throw error", async() => {
+    it("should show an error when the response throw error", async() => {
         (createPotion as jest.Mock).mockImplementation(() => (
             new Promise((resolve, reject) => jest.fn().mockRejectedValue(
                 reject(new BadRequestError('error')))
         )))
-
         render(<PotionForm/>)
+
 
         const name = screen.getByLabelText(/name/i)
         userEvent.type(name, "My awesome potion")
@@ -91,10 +91,10 @@ describe("PotionForm component when the user fill in all fields", () => {
         userEvent.type(effect, "Crazy effect")
 
         const button = screen.getByRole("button", { name: /create/i })
-
         userEvent.click(button)
 
         const message = await screen.findByText(RESPONSE_TEXT.ERROR)
+
 
         expect(message).toBeInTheDocument();
 
