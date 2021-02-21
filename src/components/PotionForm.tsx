@@ -2,32 +2,46 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Form, Input, message, Row }from 'antd'
 
 import PotionState from '../constants/PotionState'
-import { RESPONSE, RESPONSE_TEXT } from '../constants/response'
-import { createPotion } from '../services/ApiClient'
+import { MESSAGE_TYPE, POTION_MESSAGE } from '../constants/message'
 import { areFieldsValid } from '../helpers'
+import { apiCreate } from '../services/ApiClient'
 
 const PotionForm = () => {
     const [potionData, setPotionData] = useState<Potion>(
         PotionState.getDefaultState())
-    const [response, setResponse] = useState<string>('')
+    const [notificationMessage, setNotificationMessage] = useState(null)
 
     const handleSubmit = (formData: object) => {
-        if(!areFieldsValid(formData)) return setResponse(RESPONSE.INVALID)
+        if(!areFieldsValid(formData)) return setNotificationMessage(POTION_MESSAGE.CREATE.INVALID)
 
-        createPotion(potionData).then(() => {
-            setResponse(RESPONSE.SUCCESS)
-        }
-        ).catch(() =>
-            setResponse(RESPONSE.ERROR)
+        apiCreate('potions', potionData).then(() => {
+            setNotificationMessage(POTION_MESSAGE.CREATE.SUCCESS)
+        }).catch(() =>
+            setNotificationMessage(POTION_MESSAGE.CREATE.ERROR)
         )
     }
+
+    useEffect(() => {
+        return () => {
+            message.destroy()
+        }
+    }, [])
+
+    useEffect((): void => {
+        if(!notificationMessage) return
+
+        notificationMessage.type === MESSAGE_TYPE.ERROR ?
+            showErrorMessage(notificationMessage.message) : showSuccessMessage(
+                notificationMessage.message)
+
+    }, [notificationMessage])
 
     const showSuccessMessage = (text: string) => {
         message.info({
             style: { marginTop: '100px'},
             content: <span>{ text }</span>,
             onClose: () => {
-                    setResponse('')
+                setNotificationMessage('')
             },
             id: 'info-notification'
         })
@@ -37,27 +51,10 @@ const PotionForm = () => {
         message.error({
             style: { marginTop: '100px'},
             content: <span>{ text }</span>,
-            onClose: setResponse(''),
+            onClose: setNotificationMessage(''),
             id: 'error-notification'
         })
     }
-
-    useEffect((): void => {
-        switch(response){
-            case RESPONSE.SUCCESS:
-                showSuccessMessage('Potion created'); break
-            case RESPONSE.ERROR:
-                showErrorMessage('Creation error'); break
-            case RESPONSE.INVALID:
-                showErrorMessage('Fill in all the fields'); break
-        }
-    }, [response])
-
-    useEffect(() => {
-        return () => {
-            message.destroy()
-        }
-    }, [])
 
     return (
         <Card>

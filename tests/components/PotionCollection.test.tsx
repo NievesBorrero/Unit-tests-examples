@@ -3,9 +3,8 @@ import "@testing-library/jest-dom"
 import {render, screen } from "@testing-library/react"
 
 import PotionCollection from "../../src/components/PotionCollection"
-import { useSearchAllPotions } from "../../src/hooks/useSearchAllPotions"
-import { searchAllPotions } from "../../src/services/ApiClient"
 import {potion} from "../constants"
+import { apiList } from "../../src/services/ApiClient"
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -25,7 +24,7 @@ jest.mock('../../src/services/ApiClient')
 
 describe("PotionCollection component", () => {
     it("should list potions", async() => {
-        (searchAllPotions as jest.Mock).mockImplementation(() => (
+        (apiList as jest.Mock).mockImplementation(() => (
             new Promise((resolve) => jest.fn().mockResolvedValue(resolve(
                 [ potion ])))
         ))
@@ -36,6 +35,6 @@ describe("PotionCollection component", () => {
 
         expect(potionName).toBeInTheDocument();
 
-        (searchAllPotions as jest.Mock).mockReset()
+        (apiList as jest.Mock).mockReset()
     })
 });

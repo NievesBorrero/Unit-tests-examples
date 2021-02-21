@@ -10,7 +10,7 @@ const { Item } = List
 
 const PotionDetail = () => {
     const [showNotification, setShowNotification] = useState(false)
-    const { potion , error} = useGetPotion()
+    const { potion } = useGetPotion()
 
     useEffect((): void => {
         if(showNotification){

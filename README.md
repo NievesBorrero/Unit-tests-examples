@@ -1,3 +1,7 @@
+# Unit tests Examples
+
+This is a project with examples of unit tests in frontend.
+
 ## Installation
 
 ```bash

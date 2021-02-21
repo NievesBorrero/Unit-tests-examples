@@ -1,36 +1,62 @@
 import { StatusCodes } from 'http-status-codes'
+
+import { BACKEND_BASE_URL } from '../constants/envar'
 import { BadRequestError, InternalServerError } from '../errors'
 
 class ApiClient {
-    private readonly BASE_PATH = 'http://localhost:3030'
-    private readonly RESOURCE = 'potions'
-    private readonly HEADERS = {'Content-Type': 'application/json'}
+    BASE_URL: string
+    resource: string
+    headers: Headers
 
-    async searchAll() {
-      const request = new Request(`${this.BASE_PATH}/${this.RESOURCE}`, {
+
+    constructor () {
+      this.BASE_URL = `${BACKEND_BASE_URL}/{resource}/`
+      this.resource = ''
+      this.headers = new Headers({
+        'Content-Type': 'application/json'
+      })
+    }
+
+    on (resource: string) {
+      this.resource = resource
+      return this
+    }
+
+    generateUrl (id?: string): string {
+      const url = this.BASE_URL.replace('{resource}', this.resource)
+
+      if (!id) return url
+
+      return url.concat(id, '/')
+    }
+
+
+    async list() {
+      const request = new Request(this.generateUrl(), {
         method: 'GET',
-        headers: this.HEADERS
+        headers: this.headers
       })
       const response = await this.request(request).then(response => response)
 
       return response
     }
 
-    async get(id: string) {
-      const request = new Request(`${this.BASE_PATH}/${this.RESOURCE}/${id}`, {
+
+    async retrieve(id: string) {
+      const request = new Request(this.generateUrl(id), {
         method: 'GET',
-        headers: this.HEADERS
+        headers: this.headers
       })
       const response = await this.request(request).then(response => response)
 
       return response
     }
 
-    create (payload:object) {
-      const request = new Request(`${this.BASE_PATH}/${this.RESOURCE}`, {
+    create (payload: object) {
+      const request = new Request(this.generateUrl(), {
         method: 'POST',
         body: JSON.stringify(payload),
-        headers: this.HEADERS
+        headers: this.headers
       })
 
       return this.request(request)
@@ -71,17 +97,18 @@ class ApiClient {
 
   }
 
-  export const searchAllPotions = async () => {
-    const potionRepository = new ApiClient()
-    return await potionRepository.searchAll()
-  }
 
-  export const getPotion = async (id: string) => {
-    const potionRepository = new ApiClient()
-    return await potionRepository.get(id)
-  }
+export const apiList = async (resource: string) => {
+    const apiClient = new ApiClient()
+    return await apiClient.on(resource).list()
+}
 
-  export const createPotion = async (potion: Potion) => {
-    const potionRepository = new ApiClient()
-    return await potionRepository.create(potion)
-  }
+export const apiCreate = async (resource: string, payload: object) => {
+    const apiClient = new ApiClient()
+    return await apiClient.on(resource).create(payload)
+}
+
+export const apiRetrieve = async (resource: string, id: string) => {
+    const apiClient = new ApiClient()
+    return await apiClient.on(resource).retrieve(id)
+}
