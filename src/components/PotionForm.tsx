@@ -9,9 +9,9 @@ import { apiCreate } from '../services/ApiClient'
 const PotionForm = () => {
     const [potionData, setPotionData] = useState<Potion>(
         PotionState.getDefaultState())
-    const [notificationMessage, setNotificationMessage] = useState(null)
+    const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(null)
 
-    const handleSubmit = (formData: object) => {
+    const handleSubmit = (formData: object): void => {
         if(!areFieldsValid(formData)) return setNotificationMessage(POTION_MESSAGE.CREATE.INVALID)
 
         apiCreate('potions', potionData).then(() => {
@@ -41,7 +41,7 @@ const PotionForm = () => {
             style: { marginTop: '100px'},
             content: <span>{ text }</span>,
             onClose: () => {
-                setNotificationMessage('')
+                setNotificationMessage(null)
             },
             id: 'info-notification'
         })
@@ -51,7 +51,7 @@ const PotionForm = () => {
         message.error({
             style: { marginTop: '100px'},
             content: <span>{ text }</span>,
-            onClose: setNotificationMessage(''),
+            onClose: setNotificationMessage(null),
             id: 'error-notification'
         })
     }
@@ -68,7 +68,7 @@ const PotionForm = () => {
                                 name="name"
                                 type="text"
                                 size="large"
-                                onChange={(e) => setPotionData(
+                                onChange={(e): void => setPotionData(
                                     {...potionData, name: e.target.value }
                                 )}
                             />
@@ -81,7 +81,7 @@ const PotionForm = () => {
                                 name="name"
                                 type="number"
                                 size="large"
-                                onChange={(e) => setPotionData(
+                                onChange={(e): void => setPotionData(
                                     {...potionData, prize: Number(e.target.value) }
                                 )}
                             />
@@ -94,7 +94,7 @@ const PotionForm = () => {
                                 name="effect"
                                 type="text"
                                 size="large"
-                                onChange={(e) => setPotionData(
+                                onChange={(e): void => setPotionData(
                                     {...potionData, effect: e.target.value }
                                 )}
                             />

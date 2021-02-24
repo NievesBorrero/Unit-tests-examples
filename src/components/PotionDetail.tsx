@@ -9,8 +9,8 @@ import { DetailCard } from './styled/DetailCard'
 const { Item } = List
 
 const PotionDetail = () => {
-    const [showNotification, setShowNotification] = useState(false)
-    const { potion } = useGetPotion()
+    const [showNotification, setShowNotification] = useState<boolean>(false)
+    const { potion }: PotionResponse = useGetPotion()
 
     useEffect((): void => {
         if(showNotification){
@@ -34,7 +34,7 @@ const PotionDetail = () => {
                         header={<BoldText>Ingredients</BoldText>}
                         bordered
                         dataSource={potion?.ingredients}
-                        renderItem={item => (
+                        renderItem={(item): JSX.Element => (
                             <Item>
                                 {item}
                             </Item>

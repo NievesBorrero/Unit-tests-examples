@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Row, message } from 'antd'
+import React from 'react'
+import { Row } from 'antd'
 
 import PotionCard from './PotionCard'
 import { useSearchAllPotions } from '../hooks/useSearchAllPotions'
 
-const PotionCollection = () => {
-    const { potionList } = useSearchAllPotions()
+const PotionCollection = (): JSX.Element => {
+    const { potionList }: PotionListResponse = useSearchAllPotions()
 
     return (
         <Row gutter={[20, 20]}>

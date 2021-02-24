@@ -20,21 +20,25 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 })
 
+afterEach(() => {
+    jest.clearAllMocks()
+})
+
 jest.mock('../../src/services/ApiClient')
 
-describe("PotionCollection component", () => {
-    it("should list potions", async() => {
-        (apiList as jest.Mock).mockImplementation(() => (
-            new Promise((resolve) => jest.fn().mockResolvedValue(resolve(
-                [ potion ])))
-        ))
+describe("When user access", () => {
+    describe("and there are no errors", () => {
+        it("should show potions", async() => {
+            (apiList as jest.Mock).mockImplementation(() => (
+                new Promise((resolve) => jest.fn().mockResolvedValue(resolve(
+                    [ potion ])))
+            ))
 
-        render(<PotionCollection/>)
+            render(<PotionCollection/>)
 
-        const potionName = await screen.findByText(potion.name)
+            const potionName = await screen.findByText(potion.name)
 
-        expect(potionName).toBeInTheDocument();
-
-        (apiList as jest.Mock).mockReset()
+            expect(potionName).toBeInTheDocument()
+        })
     })
 });

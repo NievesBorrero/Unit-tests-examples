@@ -19,17 +19,19 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 })
 
-describe("PotionDetail component", () => {
-    it("should show a notification", async() => {
+describe("when user click send", () => {
+    describe("and there are no errors", () => {
+        it("should show a notification", async() => {
 
-        render(<PotionDetail/>)
+            render(<PotionDetail/>)
 
-        const button = screen.getByRole("button", { name: /add/i })
+            const button = screen.getByRole("button", { name: /add/i })
 
-        userEvent.click(button)
+            userEvent.click(button)
 
-        const message = await screen.findByText('Potion added')
+            const message = await screen.findByText('Potion added')
 
-        expect(message).toBeInTheDocument();
+            expect(message).toBeInTheDocument()
+        })
     })
-});
+})
