@@ -8,7 +8,6 @@ class ApiClient {
     resource: string
     headers: Headers
 
-
     constructor () {
       this.BASE_URL = `${BACKEND_BASE_URL}/{resource}/`
       this.resource = ''
@@ -17,7 +16,7 @@ class ApiClient {
       })
     }
 
-    on (resource: string) {
+    on (resource: string): ApiClient {
       this.resource = resource
       return this
     }
@@ -31,7 +30,7 @@ class ApiClient {
     }
 
 
-    async list() {
+    async list(): Promise<unknown> {
       const request = new Request(this.generateUrl(), {
         method: 'GET',
         headers: this.headers
@@ -42,7 +41,7 @@ class ApiClient {
     }
 
 
-    async retrieve(id: string) {
+    async retrieve(id: string): Promise<unknown> {
       const request = new Request(this.generateUrl(id), {
         method: 'GET',
         headers: this.headers
@@ -52,7 +51,7 @@ class ApiClient {
       return response
     }
 
-    create (payload: object) {
+    create (payload: object): Promise<unknown> {
       const request = new Request(this.generateUrl(), {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -62,13 +61,13 @@ class ApiClient {
       return this.request(request)
     }
 
-    async request (request:RequestInfo) {
+    async request (request:RequestInfo): Promise<unknown> {
       return await fetch(request)
         .then(response => this.handleHttpResponse(response))
         .then(response => this.handleHttpResponseData(response))
     }
 
-    handleHttpResponse (response:any) {
+    handleHttpResponse (response:Response): Promise<unknown> {
       this.handleHttpErrorResponses(response)
 
       if (response.status === StatusCodes.NO_CONTENT) {
@@ -78,14 +77,14 @@ class ApiClient {
       return response.json()
     }
 
-    handleHttpResponseData (data:any) {
-      if (data.status_code !== StatusCodes.BAD_REQUEST) {
+    handleHttpResponseData (data: HttpError|unknown): unknown {
+      if (data['status_code'] !== StatusCodes.BAD_REQUEST) {
         return data
       }
       throw new BadRequestError(JSON.stringify(data))
     }
 
-    handleHttpErrorResponses (response:any) {
+    handleHttpErrorResponses (response: Response): void {
       if (response.status >= StatusCodes.INTERNAL_SERVER_ERROR) {
         throw new InternalServerError('Internal server error')
       }
@@ -94,21 +93,22 @@ class ApiClient {
         throw Error('Response not valid')
       }
     }
+}
 
-  }
 
-
-export const apiList = async (resource: string) => {
+export const apiList = async (resource: string): Promise<unknown> => {
     const apiClient = new ApiClient()
     return await apiClient.on(resource).list()
 }
 
-export const apiCreate = async (resource: string, payload: object) => {
+export const apiCreate = async (
+  resource: string, payload: object): Promise<unknown> => {
     const apiClient = new ApiClient()
     return await apiClient.on(resource).create(payload)
 }
 
-export const apiRetrieve = async (resource: string, id: string) => {
+export const apiRetrieve = async (
+  resource: string, id: string): Promise<unknown> => {
     const apiClient = new ApiClient()
     return await apiClient.on(resource).retrieve(id)
 }

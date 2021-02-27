@@ -3,7 +3,7 @@ import "@testing-library/jest-dom"
 import {render, screen } from "@testing-library/react"
 
 import PotionCollection from "../../src/components/PotionCollection"
-import {potion} from "../constants"
+import { potion } from "../constants"
 import { apiList } from "../../src/services/ApiClient"
 
 Object.defineProperty(window, 'matchMedia', {
