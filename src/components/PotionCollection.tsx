@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Row } from 'antd'
 
 import PotionCard from './PotionCard'
-import { useSearchAllPotions } from '../hooks/useSearchAllPotions'
+import { listPotion } from '../state/potions/actions'
 
 const PotionCollection = (): JSX.Element => {
-    const { potionList }: PotionListResponse = useSearchAllPotions()
+    const dispatch = useDispatch()
+
+    const { potionList } = useSelector(state => ({
+        potionList: state.potion.potionList
+    }))
+
+    useEffect(()=> {
+        dispatch(listPotion())
+    }, [])
 
     return (
         <Row gutter={[20, 20]}>

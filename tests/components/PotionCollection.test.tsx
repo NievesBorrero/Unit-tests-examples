@@ -1,10 +1,12 @@
 import React from "react"
 import "@testing-library/jest-dom"
 import {render, screen } from "@testing-library/react"
+import { Provider } from 'react-redux'
 
 import PotionCollection from "../../src/components/PotionCollection"
 import { potion } from "../constants"
 import { apiList } from "../../src/services/ApiClient"
+import configureStore from "../../src/state/store"
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -20,6 +22,8 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 })
 
+const store = configureStore()
+
 afterEach(() => {
     jest.clearAllMocks()
 })
@@ -34,7 +38,7 @@ describe("When user access", () => {
                     [ potion ])))
             ))
 
-            render(<PotionCollection/>)
+            render(<Provider store={store}><PotionCollection/></Provider>)
 
             const potionName = await screen.findByText(potion.name)
 
