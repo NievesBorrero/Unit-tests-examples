@@ -2,6 +2,8 @@
 
 This is a project with examples of unit tests in frontend.
 
+You can see an example with Redux in the branch: example/with-redux. There is a PR that will not merge so you can easily see the differences.
+
 ## Installation
 
 ```bash
